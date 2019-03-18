@@ -24,10 +24,37 @@ namespace CIS575_HW6
             Console.WriteLine("PRI_10k = {0} swaps", InsertionSort(PRI_array10k));
             Console.WriteLine("AOI_100 = {0} swaps", InsertionSort(AOI_array100));
             Console.WriteLine("AOI_1k = {0} swaps", InsertionSort(AOI_array1k));
-            Console.WriteLine("AOI_10k = {0} swaps", InsertionSort(AOI_array10k));
+            Console.WriteLine("AOI_10k = {0} swaps\n", InsertionSort(AOI_array10k));
+
+            PRI_array100 = GenerateRndArray(100);
+            PRI_array1k = GenerateRndArray(1000);
+            PRI_array10k = GenerateRndArray(10000);
+            AOI_array100 = GenerateAlmstOrderedArray(100);
+            AOI_array1k = GenerateAlmstOrderedArray(1000);
+            AOI_array10k = GenerateAlmstOrderedArray(10000);
+
+            Console.WriteLine("PRI_100 = {0} swaps", HeapSortSift(PRI_array100));
+            Console.WriteLine("PRI_1k = {0} swaps", HeapSortSift(PRI_array1k));
+            Console.WriteLine("PRI_10k = {0} swaps", HeapSortSift(PRI_array10k));
+            Console.WriteLine("AOI_100 = {0} swaps", HeapSortSift(AOI_array100));
+            Console.WriteLine("AOI_1k = {0} swaps", HeapSortSift(AOI_array1k));
+            Console.WriteLine("AOI_10k = {0} swaps\n", HeapSortSift(AOI_array10k));
+
+            PRI_array100 = GenerateRndArray(100);
+            PRI_array1k = GenerateRndArray(1000);
+            PRI_array10k = GenerateRndArray(10000);
+            AOI_array100 = GenerateAlmstOrderedArray(100);
+            AOI_array1k = GenerateAlmstOrderedArray(1000);
+            AOI_array10k = GenerateAlmstOrderedArray(10000);
+
+            Console.WriteLine("PRI_100 = {0} swaps", HeapSortPercolate(PRI_array100));
+            Console.WriteLine("PRI_1k = {0} swaps", HeapSortPercolate(PRI_array1k));
+            Console.WriteLine("PRI_10k = {0} swaps", HeapSortPercolate(PRI_array10k));
+            Console.WriteLine("AOI_100 = {0} swaps", HeapSortPercolate(AOI_array100));
+            Console.WriteLine("AOI_1k = {0} swaps", HeapSortPercolate(AOI_array1k));
+            Console.WriteLine("AOI_10k = {0} swaps", HeapSortPercolate(AOI_array10k));
 
             Console.ReadLine();
-
 
 
             /// InsetionSort; Returns number of swaps performed on array
@@ -77,6 +104,67 @@ namespace CIS575_HW6
                 }
                 return returnArray;
             }
+
+            /// HeapSort using SIFT on an integer array
+            int HeapSortSift(int[] arr)
+            {
+                int numOfSwaps = 0;
+                int firstParent = (arr.Length - 1) / 2;
+                bool isEven = arr.Length % 2 == 0 ? true : false;
+
+                if (isEven) // meaning there is no right child for the current parent node
+                {
+                    if (arr[firstParent] < arr[(firstParent*2) + 1])
+                    {
+                        int temp = arr[firstParent];
+                        arr[firstParent] = arr[(firstParent * 2) + 1];
+                        arr[(firstParent * 2) + 1] = temp;
+                    }
+                    firstParent--;
+                    numOfSwaps++;
+                }
+
+                for (int i = firstParent; i > -1; i--)
+                {
+                    int parentVal = arr[i];
+                    int LCval = arr[(i*2)+1];
+                    int RCval = arr[(i*2) + 2];
+                    if (LCval > parentVal || RCval > parentVal)
+                    {
+                        if (LCval > RCval)
+                        {
+                            arr[i] = LCval;
+                            arr[(i*2)+1] = parentVal;
+                        }
+                        else
+                        {
+                            arr[i] = RCval;
+                            arr[(i*2)+2] = parentVal;
+                        }
+                    numOfSwaps++;
+                    }
+                    
+                }
+                return numOfSwaps;
+            }
+
+            /// HeapSort using PERCOLATE on an integer array
+            int HeapSortPercolate(int[] arr)
+            {
+                int numOfSwaps = 0;
+                for (int i = arr.Length-1; i > 0; i--)
+                {
+                    if (arr[i] > arr[(i - 1) / 2])
+                    {
+                        int temp = arr[i];
+                        arr[i] = arr[(i - 1) / 2];
+                        arr[(i - 1) / 2] = temp;
+                        numOfSwaps++;
+                    }
+                }
+                return numOfSwaps;
+            }
+            
         }
     }
 }
