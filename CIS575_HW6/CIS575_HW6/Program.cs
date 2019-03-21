@@ -106,50 +106,64 @@ namespace CIS575_HW6
             }
 
             /// HeapSort using SIFT on an integer array
-            int HeapSortSift(int[] arr)
+            int HeapSortSiftBasic(int[] arr)
             {
                 int numOfSwaps = 0;
-                int firstParent = (arr.Length - 1) / 2;
+                int lowestParent = (arr.Length - 2) / 2;
                 bool isEven = arr.Length % 2 == 0 ? true : false;
 
-                if (isEven) // meaning there is no right child for the current parent node
-                {
-                    if (arr[firstParent] < arr[(firstParent*2) + 1])
-                    {
-                        int temp = arr[firstParent];
-                        arr[firstParent] = arr[(firstParent * 2) + 1];
-                        arr[(firstParent * 2) + 1] = temp;
-                    }
-                    firstParent--;
-                    numOfSwaps++;
-                }
-
-                for (int i = firstParent; i > -1; i--)
+                for (int i = 0; i < lowestParent + 1; i++)
                 {
                     int parentVal = arr[i];
-                    int LCval = arr[(i*2)+1];
-                    int RCval = arr[(i*2) + 2];
-                    if (LCval > parentVal || RCval > parentVal)
+                    int LCval = arr[(i * 2) + 1];
+                    int RCval = (((i * 2) + 2) > arr.Length - 1) ? -1 : arr[(i * 2) + 2];
+                    if (LCval > parentVal && RCval > parentVal)
                     {
                         if (LCval > RCval)
                         {
                             arr[i] = LCval;
-                            arr[(i*2)+1] = parentVal;
+                            arr[(i * 2) + 1] = parentVal;
                         }
                         else
                         {
                             arr[i] = RCval;
-                            arr[(i*2)+2] = parentVal;
+                            arr[(i * 2) + 2] = parentVal;
                         }
-                    numOfSwaps++;
+                        numOfSwaps++;
                     }
-                    
+                    else
+                    {
+                        if (LCval > parentVal)
+                        {
+                            arr[i] = LCval;
+                            arr[(i * 2) + 1] = parentVal;
+                            numOfSwaps++;
+                        }
+                        else if (RCval > parentVal)
+                        {
+                            arr[i] = RCval;
+                            arr[(i * 2) + 2] = parentVal;
+                            numOfSwaps++;
+                        }
+                    }                 
                 }
                 return numOfSwaps;
             }
 
+            int HeapSortSift(int[] arr)
+            {
+                int currentRunSwaps;
+                int totalSwaps = 0;
+                do
+                {
+                    currentRunSwaps = HeapSortSiftBasic(arr);
+                    totalSwaps += currentRunSwaps;
+                } while (currentRunSwaps > 0);
+                return totalSwaps;
+            }
+
             /// HeapSort using PERCOLATE on an integer array
-            int HeapSortPercolate(int[] arr)
+            int HeapSortPercolateBasic(int[] arr)
             {
                 int numOfSwaps = 0;
                 for (int i = arr.Length-1; i > 0; i--)
@@ -164,7 +178,18 @@ namespace CIS575_HW6
                 }
                 return numOfSwaps;
             }
-            
+
+            int HeapSortPercolate(int[] arr)
+            {
+                int currentRunSwaps;
+                int totalSwaps = 0;
+                do
+                {
+                    currentRunSwaps = HeapSortPercolateBasic(arr);
+                    totalSwaps += currentRunSwaps;
+                } while (currentRunSwaps > 0);
+                return totalSwaps;
+            }
         }
     }
 }
